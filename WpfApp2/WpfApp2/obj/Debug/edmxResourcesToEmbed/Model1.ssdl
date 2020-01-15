@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Tema6Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CLIENTES">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="apellido" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="genero" Type="varchar" MaxLength="50" />
+    <Property Name="direccion" Type="varchar" MaxLength="50" />
+    <Property Name="localidad" Type="varchar" MaxLength="50" />
+    <Property Name="pais" Type="varchar" MaxLength="50" />
+    <Property Name="fecha_nacimiento" Type="date" />
+  </EntityType>
+  <EntityType Name="PEDIDOS">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="fecha_pedido" Type="date" />
+    <Property Name="numero_articulos" Type="int" />
+    <Property Name="importe" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="cliente" Type="int" />
+    <Property Name="enviado" Type="int" />
+  </EntityType>
+  <Association Name="FK__PEDIDOS__cliente__4BAC3F29">
+    <End Role="CLIENTES" Type="Self.CLIENTES" Multiplicity="0..1" />
+    <End Role="PEDIDOS" Type="Self.PEDIDOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CLIENTES">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PEDIDOS">
+        <PropertyRef Name="cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Tema6ModelStoreContainer">
+    <EntitySet Name="CLIENTES" EntityType="Self.CLIENTES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PEDIDOS" EntityType="Self.PEDIDOS" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__PEDIDOS__cliente__4BAC3F29" Association="Self.FK__PEDIDOS__cliente__4BAC3F29">
+      <End Role="CLIENTES" EntitySet="CLIENTES" />
+      <End Role="PEDIDOS" EntitySet="PEDIDOS" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

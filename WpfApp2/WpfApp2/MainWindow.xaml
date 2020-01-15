@@ -1,0 +1,132 @@
+﻿<Window x:Class="WpfApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="BaseDeDatos" Height="450" Width="800">
+
+    <Window.Resources>
+        <DataTemplate x:Key="clientesTemplate" DataType="{x:Type local:CLIENTE}">
+                <StackPanel>
+                    <TextBlock>
+                        <Run Text="{Binding id}"/>
+                        <Run> - </Run>
+                        <Run Text="{Binding nombre}"/>
+                        <Run> </Run>
+                        <Run Text="{Binding apellido}"/>
+                </TextBlock>
+                </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="filtrarNombreTemplate">
+            <StackPanel>
+                <TextBlock>
+                        <Run Text="{Binding nombre}"/>
+                        <Run> </Run>
+                        <Run Text="{Binding apellido}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <Style x:Key="{x:Type StackPanel}" TargetType="StackPanel">
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+        <Style x:Key="{x:Type Button}" TargetType="Button">
+            <Setter Property="Margin" Value="0,12,0,8"/>
+            <Setter Property="Padding" Value="12,2,12,2"/>
+        </Style>
+        <Style x:Key="{x:Type TextBlock}"  TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,12,0,0"/>
+        </Style>
+        <Style x:Key="{x:Type ComboBox}" TargetType="ComboBox">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="ItemsSource" Value="{Binding}"/>
+            <Setter Property="ItemTemplate" Value="{StaticResource clientesTemplate}"/>
+        </Style>
+        
+    </Window.Resources>
+    
+    <TabControl>
+        
+        <TabItem Header="ListBox">
+            <ListBox Name="clientesListBox" ItemsSource="{Binding}" ItemTemplate="{StaticResource clientesTemplate}"/>
+        </TabItem>
+        
+        
+        <TabItem Header="Insertar">
+            <StackPanel x:Name="insertarStackPanel">
+                
+                <TextBlock Text="ID"></TextBlock>
+                <TextBox x:Name="idTextBox" Text="{Binding id}"/>
+
+                <TextBlock Text="Nombre"></TextBlock>
+                <TextBox x:Name="nombreTextBox" Text="{Binding nombre}"/>
+
+                <TextBlock Text="Apellido"></TextBlock>
+                <TextBox Name="apellidoTextBox" Text="{Binding apellido}"/>
+
+                <Button x:Name="insertarButton" HorizontalAlignment="Left" Click="insertarButton_Click"> Insertar </Button>
+            </StackPanel>
+        </TabItem>
+        
+        
+        <TabItem Header="Eliminar">
+            <StackPanel x:Name="eliminarStackPanel">
+                <ComboBox x:Name="eliminarComboBox" HorizontalAlignment="Left"/>
+                <Button x:Name="eliminarButton" HorizontalAlignment="Left" Click="eliminarButton_Click">Eliminar</Button>
+            </StackPanel>
+        </TabItem>
+
+
+        <TabItem Header="Modificar">
+            <StackPanel x:Name="modificarStackPanel" DataContext="{Binding ElementName=modificarComboBox, Path=SelectedItem}">
+                <ComboBox x:Name="modificarComboBox" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="ID"/>
+                <TextBox x:Name="idModificarTextBox" IsEnabled="False" Text="{Binding id, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Text="Nombre"/>
+                <TextBox x:Name="nombreModificarTextBox" Text="{Binding nombre, UpdateSourceTrigger=PropertyChanged }"/>
+
+                <TextBlock Text="Apellido"/>
+                <TextBox Name="apellidoModificarTextBox" Text="{Binding apellido, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button x:Name="modificarButton" HorizontalAlignment="Left" Click="modificarButton_Click">Modificar</Button>
+            </StackPanel>
+        </TabItem>
+        
+        <TabItem Header="DataGrid">
+            <DockPanel Name="datagridDockPanel">
+                <Button Name="actualizarButton" HorizontalAlignment="Left" DockPanel.Dock="Bottom">Actualizar</Button>
+                <DataGrid Name="actualizarDataGrid" ItemsSource="{Binding}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Header="Identificador" Binding="{Binding id}"/>
+                        <DataGridTextColumn Width="*" Header="Nombre" Binding="{Binding nombre}"/>
+                        <DataGridTextColumn Width="*" Header="Apellido" Binding="{Binding apellido}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </TabItem>
+        
+        <TabItem Header="Filtrar">
+            <DockPanel Name="filtrarDockPanel">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <TextBlock Margin="0,0,8,0">Nombre:</TextBlock>
+                    <TextBox Name="nombrefiltrarTextBox" Width="200" Height="15"></TextBox>
+                    <Button Name="filtrarButton"  Margin="8,0,0,0" Padding="8,0,8,0" Click="FiltrarButton_Click">Filtrar</Button>
+                </StackPanel>
+                <DataGrid Name="filtrarDataGrid" ItemsSource="{Binding}" AutoGenerateColumns="true">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="*" Header="Identificador" Binding="{Binding id}"/>
+                        <DataGridTemplateColumn Width="*" Header="Nombre Completo" CellTemplate="{StaticResource filtrarNombreTemplate}"/>
+                        <DataGridTextColumn Width="*" Header="Nº de pedidos" Binding="{Binding}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </TabItem>
+
+
+    </TabControl>
+</Window>
